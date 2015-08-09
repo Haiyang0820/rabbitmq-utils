@@ -15,7 +15,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="Gradle: com.google.protobuf:protobuf-java:2.6.1" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: org.projectlombok:lombok:1.16.4" level="project" />
     <orderEntry type="library" exported="" name="Gradle: org.springframework.retry:spring-retry:1.1.2.RELEASE" level="project" />
     <orderEntry type="library" exported="" name="Gradle: aopalliance:aopalliance:1.0" level="project" />
     <orderEntry type="library" exported="" name="Gradle: commons-logging:commons-logging:1.2" level="project" />

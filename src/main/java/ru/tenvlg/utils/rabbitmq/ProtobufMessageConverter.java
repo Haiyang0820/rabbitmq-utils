@@ -1,8 +1,6 @@
 package ru.tenvlg.utils.rabbitmq;
 
-import lombok.val;
 import com.google.protobuf.Descriptors;
-import com.google.protobuf.DynamicMessage;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Parser;
 import org.springframework.amqp.AmqpRejectAndDontRequeueException;
@@ -13,9 +11,6 @@ import org.springframework.amqp.support.converter.MessageConversionException;
 
 import java.util.Map;
 
-/**
- * Created by Vladislav on 15.04.2015.
- */
 @SuppressWarnings("unused")
 public abstract class ProtobufMessageConverter extends AbstractMessageConverter {
 
@@ -37,7 +32,7 @@ public abstract class ProtobufMessageConverter extends AbstractMessageConverter 
 
     @Override
     protected Message createMessage(Object object, MessageProperties messageProperties) {
-        if((object instanceof com.google.protobuf.Message)==false){
+        if(!(object instanceof com.google.protobuf.Message)){
             throw new MessageConversionException("Message wasn't a protobuf");
         } else {
             com.google.protobuf.Message protobuf = (com.google.protobuf.Message)object;
@@ -54,21 +49,10 @@ public abstract class ProtobufMessageConverter extends AbstractMessageConverter 
 
     @Override
     public Object fromMessage(Message message) throws MessageConversionException {
-        DynamicMessage dm = null;
-        for(val type : descriptor.getMessageTypes()){
-            try {
-                dm = DynamicMessage.parseFrom(type, message.getBody());
-                break;
-            } catch (InvalidProtocolBufferException e) {
-                e.printStackTrace();
-            }
-        }
-
-        dm.getClass();
         String name = getMessageTypeName(message);
         Parser<?> parser = parsers.get(descriptor.findMessageTypeByName(name));
         if(parser == null){
-            throw new AmqpRejectAndDontRequeueException("Cannot convert, unknown parser for message type %s".format(name));
+            throw new AmqpRejectAndDontRequeueException(String.format("Cannot convert, unknown parser for message type %s", name));
         }
         Object object;
         try {
@@ -77,7 +61,7 @@ public abstract class ProtobufMessageConverter extends AbstractMessageConverter 
             throw new AmqpRejectAndDontRequeueException(e.getMessage(), e);
         }
         if(object==null){
-            throw new AmqpRejectAndDontRequeueException("Cannot convert, unknown message type %s".format(name));
+            throw new AmqpRejectAndDontRequeueException(String.format("Cannot convert, unknown message type %s", name));
         }
         return object;
     }

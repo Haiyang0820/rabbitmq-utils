@@ -9,7 +9,6 @@ repositories {
 }
 
 dependencies {
-    compile group: 'org.projectlombok', name: 'lombok', version: '1.16.4'
     compile group: 'com.google.protobuf', name: 'protobuf-java', version:'2.6.1'
     compile group: 'com.rabbitmq', name: 'amqp-client', version:'3.5.4'
     compile group: 'org.springframework.amqp', name: 'spring-rabbit', version:'1.4.5.RELEASE'
