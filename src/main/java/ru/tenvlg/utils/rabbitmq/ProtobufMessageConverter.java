@@ -6,13 +6,17 @@ import com.google.protobuf.Parser;
 import org.springframework.amqp.AmqpRejectAndDontRequeueException;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageProperties;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.support.converter.AbstractMessageConverter;
 import org.springframework.amqp.support.converter.MessageConversionException;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 @SuppressWarnings("unused")
-public abstract class ProtobufMessageConverter extends AbstractMessageConverter {
+public class ProtobufMessageConverter extends AbstractMessageConverter {
 
     private static final String MESSAGE_TYPE_NAME = "message_type_name";
     private static final String CONTENT_TYPE_PROTOBUF = "application/x-google-protobuf";
@@ -20,9 +24,27 @@ public abstract class ProtobufMessageConverter extends AbstractMessageConverter 
     private final Descriptors.FileDescriptor descriptor;
     private final Map<Descriptors.Descriptor,Parser<?>> parsers;
 
-    protected ProtobufMessageConverter(Descriptors.FileDescriptor descriptor, Map<Descriptors.Descriptor, Parser<?>> parsers){
-        this.descriptor = descriptor;
-        this.parsers = parsers;
+    private static Map<Descriptors.Descriptor, Parser<?>> getParsers(Class<?> protoClass) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, NoSuchFieldException {
+        Map<Descriptors.Descriptor, Parser<?>> parsers = new HashMap<>();
+        Class<?>[] classes = protoClass.getDeclaredClasses();
+        for(Class<?> clazz : classes){
+            if(com.google.protobuf.GeneratedMessage.class.isAssignableFrom(clazz)==false
+                    || (clazz.getName().endsWith("Request")==false && clazz.getName().endsWith("Response")==false))
+                continue;
+            Descriptors.Descriptor descriptor = (Descriptors.Descriptor) clazz.getMethod("getDescriptor").invoke(null);
+            Parser<?> parser = (Parser<?>) clazz.getField("PARSER").get(null);
+            parsers.put(descriptor, parser);
+        }
+        return Collections.unmodifiableMap(parsers);
+    }
+
+    private static Descriptors.FileDescriptor getDescriptor(Class<?> protoClass) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        return (Descriptors.FileDescriptor) protoClass.getMethod("getDescriptor").invoke(null);
+    }
+
+    public ProtobufMessageConverter(Class<?> protoClass) throws NoSuchMethodException, NoSuchFieldException, IllegalAccessException, InvocationTargetException {
+        descriptor = getDescriptor(protoClass);
+        parsers = getParsers(protoClass);
     }
 
     private String getMessageTypeName(Message msg){
