@@ -28,8 +28,7 @@ public class ProtobufMessageConverter extends AbstractMessageConverter {
         Map<Descriptors.Descriptor, Parser<?>> parsers = new HashMap<>();
         Class<?>[] classes = protoClass.getDeclaredClasses();
         for(Class<?> clazz : classes){
-            if(com.google.protobuf.GeneratedMessage.class.isAssignableFrom(clazz)==false
-                    || (clazz.getName().endsWith("Request")==false && clazz.getName().endsWith("Response")==false))
+            if(com.google.protobuf.GeneratedMessage.class.isAssignableFrom(clazz)==false)
                 continue;
             Descriptors.Descriptor descriptor = (Descriptors.Descriptor) clazz.getMethod("getDescriptor").invoke(null);
             Parser<?> parser = (Parser<?>) clazz.getField("PARSER").get(null);
