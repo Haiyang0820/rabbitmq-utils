@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/rabbitmq-utils.iml" filepath="$PROJECT_DIR$/rabbitmq-utils.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/rabbitmq-utils.iml" filepath="$PROJECT_DIR$/.idea/modules/rabbitmq-utils.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/rabbitmq-utils_main.iml" filepath="$PROJECT_DIR$/.idea/modules/rabbitmq-utils_main.iml" group="rabbitmq-utils" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/rabbitmq-utils_test.iml" filepath="$PROJECT_DIR$/.idea/modules/rabbitmq-utils_test.iml" group="rabbitmq-utils" />
     </modules>
   </component>
 </project>
