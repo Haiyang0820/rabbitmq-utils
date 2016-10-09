@@ -41,7 +41,7 @@ public class ProtobufMessageListener implements IProtobufMessageListener
         try{
             return (Message) serviceMethod.invoke(protobufService, msg);
         }catch (Exception e){
-            throw new RuntimeException(String.format("protobufService=%s msg=%s", protobufService, msg), e);
+            throw new RuntimeException(String.format("service=%s, method=%s, msg=%s", protobufService, serviceMethod, msg), e);
         }
 
     }
