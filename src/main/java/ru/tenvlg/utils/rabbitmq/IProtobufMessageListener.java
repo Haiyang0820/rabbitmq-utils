@@ -9,5 +9,5 @@ import java.lang.reflect.InvocationTargetException;
  */
 @SuppressWarnings("unused")
 public interface IProtobufMessageListener {
-    Message onMessage(Message msg) throws InvocationTargetException, IllegalAccessException;
+    Message onMessage(Message msg);
 }

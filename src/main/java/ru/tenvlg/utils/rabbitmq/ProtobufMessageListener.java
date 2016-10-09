@@ -8,9 +8,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by Vladislav on 14.10.2015.
- */
 @SuppressWarnings("unused")
 public class ProtobufMessageListener implements IProtobufMessageListener
 {
@@ -32,7 +29,7 @@ public class ProtobufMessageListener implements IProtobufMessageListener
     }
 
     @Override
-    public Message onMessage(Message msg) throws InvocationTargetException, IllegalAccessException {
+    public Message onMessage(Message msg) {
         if(protobufService==null || serviceMethods==null){
             throw new RuntimeException("protobufService==null || serviceMethods==null");
         }
@@ -41,6 +38,11 @@ public class ProtobufMessageListener implements IProtobufMessageListener
         if(serviceMethod==null){
             throw new RuntimeException("serviceMethods not contains " + msgClass.getName());
         }
-        return (Message) serviceMethod.invoke(protobufService, msg);
+        try{
+            return (Message) serviceMethod.invoke(protobufService, msg);
+        }catch (Exception e){
+            throw new RuntimeException(String.format("protobufService=%s msg=%s", protobufService, msg), e);
+        }
+
     }
 }
