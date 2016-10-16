@@ -2,7 +2,6 @@ package ru.tenvlg.utils.rabbitmq;
 
 import com.google.protobuf.Message;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.HashMap;
