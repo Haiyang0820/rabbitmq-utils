@@ -22,7 +22,7 @@ public abstract class ProtobufServiceRabbitClient implements DisposableBean {
     public ProtobufServiceRabbitClient(ConnectionFactory connectionFactory, ProtobufMessageConverter messageConverter){
         this.connectionFactory = connectionFactory;
 
-        this.rabbitTemplate = new RabbitTemplate(connectionFactory);
+        this.rabbitTemplate = new CustomRabbitTemplate(connectionFactory);
         this.rabbitTemplate.setMessageConverter(messageConverter);
 
         this.rabbitAdmin = new RabbitAdmin(connectionFactory);
